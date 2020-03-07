@@ -34,6 +34,7 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
 
 ## PCB
 Minden részletesebb leírás nélkül egyelőre itt az általam használt PCB: https://www.pcbway.com/project/shareproject/PxMatrix_ESP8266_Driver.html
+img könyvtárban van egy kép hogy néz ki. Részletes leírás majd később.
 
 ## 3D nyomtatott alkatrészek
 Ezek sem véglegesek. Ezek csak azért kellenek hogy az egyes LEDek annyira ne látszódjanak. Minden szükséges fájl ott van a 3D alkönyvtárban.
