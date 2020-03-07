@@ -117,11 +117,11 @@ const byte minutes[12][MINSIZE] = {
 
 // Update the below parameters for your project
 // Also check NTP.h for some parameters as well
-const char* ssid = "NygmaRinglo37";
-const char* password = "Ringlo2012Oliver";
-const char* mqtt_server = "192.168.1.80"; 
-const char* mqtt_user = "mquser";
-const char* mqtt_password = "mokus4";
+const char* ssid = "xxx";
+const char* password = "xxx";
+const char* mqtt_server = "192.168.1.xx"; 
+const char* mqtt_user = "xx";
+const char* mqtt_password = "xx";
 const char* clientID = "wordclock";
 const char* topicStatus = "/wordclock/status";
 const char* topicDebug = "/wordclock/debug";
