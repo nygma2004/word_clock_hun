@@ -36,5 +36,20 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
 Minden részletesebb leírás nélkül egyelőre itt az általam használt PCB: https://www.pcbway.com/project/shareproject/PxMatrix_ESP8266_Driver.html
 img könyvtárban van egy kép hogy néz ki. Részletes leírás majd később.
 
+## Hardver
+- 32x32 pixeles, 192x192 mm P6 matrix kijelző: https://www.aliexpress.com/item/32658820147.html
+- Wemos D1 mini klón: ebay, aliexpress, banggood, én már nem emlékszem az enyém honnan van
+- 0.1 inch-es tűsor és csatlakozó 
+- jumperek
+- 0.2 inch-es csavaros 2 pólusú csatlakozó
+- fotóellenállás
+
+A PI és PO csatlakozóhoz nem vettem szabványos dugót és ajzatot, hanem sima egy soros tűsort és csatlakozót használtam, kéttőt egymás mellett és tökéletesen működik. Sőt a PO és a tápcsatlakozó olyan közel van egymáshoz hogy ott nem és férne el rendes ajzat. Viszont cserébe figyelni kell hogy dugja be az ember a dolgokat. Ahogy a képen is látszik a kijelzőn nyák lapján lévő nyilacskák balról jobbra mutassanak, és a PO csatlakozóba a szalagkábelt úgy kell bedugni hogy a csatlakozó oldalán a kiugrás a ESP felé legyen.
+
+![Finished PCB](img/20200307_102507.jpg)
+
+A nyákon a táp csatlakozó 5V és GND vezetéke össze van kötve a ESP 5V és GND lábával, így lehet a kijelzőt az ESPn keresztül microUSB csatlakozón keresztül hajtani, vagy más tápellátás esetén azt is a tápcsatlakozóra kötni és akkor azt ad áramot az ESPnek. Az én programom esetén ahol egyszerre sosem világít túl sok LED, USB tápról lehet a kijelzőt hajtani.
+A P6-os matrix kijelző esetén a jumpereket a fenti képen látható módon kell elhelyezni.
+
 ## 3D nyomtatott alkatrészek
 Ezek sem véglegesek. Ezek csak azért kellenek hogy az egyes LEDek annyira ne látszódjanak. Minden szükséges fájl ott van a 3D alkönyvtárban.
