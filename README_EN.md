@@ -10,60 +10,58 @@ This is my implementation of the Word Clock in Hungarian. I post a long Youtube 
 - First version of the code, main features included
 - Brightness control missing
 
-## Főbb funkciók
-- 10x10 mátrixban elhelyezett magyar szavakkal mutatja az aktuális időt 5 perces pontossággal
-- Az egyes szavak színe a napszaknak megfelelően, nappal fehér, este kékes, naplementekor piros, napfelkeltekor narancssárgás és között 1 órát átmenet
-- A pontos időt NTP szerverről szedi, kézi beállítás nincs
-- Minden egész perckor rövid animálás van, amikor 8-10 véletlenszerű betű felvillan véletlenszerű színnel
-- MQTT szerverre minden percben küld egy státus üzenetet: RSSI, uptime percben és a érzékelt fényerő
-- MQTTn keresztül figyel egy sleep topic-ra, ahova ha 1-es érkezik akkor lekapcsolja a kijelzőt
+## Main features
+- Display the current time by ligthing better in a 10x10 matrix which spell out the correct time. Every 5 minutes increment in Hungarian.
+- The colour of the letters follows the time of the day, it is blue overnight, orange in dawn, white during the day, red at sunset. There is a 1 hour transition for each phased and the colour transition from one to another.
+- Time is synced from NTP server, there is no manual setting.
+- There is a small animation every minute, where 8-10 letters are light randomly in a random color.
+- Status message is sent over MQTT which includes the RSSI, uptime and the brightness value.
+- Device subscribes to a sleep topic in MQTT and if 1 is received, the screen is turned off ("quiet" mode overnight).
 
-## Telepítés
-- A kód Arudino IDE alatt kell elfordítani, ami ESP8266 alá be van konfigurálva
-- Szükséges libraryk: PxMatrix LED MATRIX library by Dominic Buchstaller, Time by Michael Margolis (ezek megtalálhatók a Library Manager-ben), és persze az ESP alap libraryk, PubSubClient, stb.
-### Projekt fájljai:
-- WordClock_PxMatrix.ino: teljes programkód, ebben nem kell semmit módosítani ha ugyan ezt a kijelzőt használod és szintén magyar a kijelző
-- settings.h: ebbe található a program beállításához szükséges össze paraméter
-  - ANALOG_LOW: a legkisebb mért fény mennyiség (A0 analóg jel értéke)
-  - BRIGHTNESS_LOW: a fenti érték esetén a kijező minimális fényereje
-  - ANALOG_HIGH 120: a legnagyobb mért fény mennyiség (A0 analóg jel értéke)
-  - BRIGHTNESS_HIGH: a fenti érték esetén a kijező maximális fényereje
+## Installing
+- This is an Arduino IDE sketch, the IDE needs to be configured for ESP8266.
+- Required libraries: PxMatrix LED MATRIX library by Dominic Buchstaller, Time by Michael Margolis (all can be found in the Library Manager), and basic ESP libraries like HTTP, PubSubClient for MQTT stb.
+### Project files:
+- WordClock_PxMatrix.ino: full source code. If the project is re-implemented for another language, some changes may be required here. More on that in the video.
+- settings.h: contains all paramters and program settings
+  - ANALOG_LOW: lowest A0 analogue value, which corresponds to darkness
+  - BRIGHTNESS_LOW: brightness value of the display fo the lowest ANALOG_LOW value
+  - ANALOG_HIGH 120: highest A0 analogue value, which corresponds to brightess condition
+  - BRIGHTNESS_HIGH: brightness value of the display fo the lowest ANALOG_HIGH value
   - ssid: wifi SSID
-  - password: wifi jelszó
-  - mqtt_server: MQTT szerver IPje, vagy maradjon üres ha nem kell
-  - mqtt_user: MQTT usernév
-  - mqtt_password: MQTT jelszó
-  - clientID: MQTT klines ID
-  - topicstatus: az MQTT topic amire az óra küldi percenként a státusz üzenetet
-  - topicDebug: az MQTT topic amire a debug üzenetek mennek
-  - topicSleep: az MQTT topic amire várja a sleep üzentetet
-  - STATUS_UPDATE_INTERVAL: státusz MQTT üzenet gyakoriság másodpercben
-  - ANIMATION_WORD_COUNT: minden percben a rövid animációban kigyújtütt betűk száma
-  - ANIMATION_WORD_DELAY: az animációban az egyes betűk közötti késletetés miliszekundumban
-- NTP.h fájl 63 sorától pár beállítás
-  - GMTOffset: időzóna percben CET esetén ez 60
-  - sm_latitude, sm_longtitude: földrajzi szélesség és hosszúság a napfelkelte, napnyugta számításhoz
-- Arduino Board Configuration amit én használtam: LOLIN(WEMOS) D1 R2 mini, 4MB Flash size
+  - password: wifi password
+  - mqtt_server: MQTT server IP, leave empty to disable MQTT
+  - mqtt_user: MQTT user name
+  - mqtt_password: MQTT password
+  - clientID: MQTT client ID
+  - topicstatus: MQTT topic to which the status messages will be sent to
+  - topicDebug: MQTT topic to which the debug messages will be sent to
+  - topicSleep: MQTT sleep topic the device subscribes to
+  - STATUS_UPDATE_INTERVAL: interval of the status messages in seconds
+  - ANIMATION_WORD_COUNT: number of letters in the animation every minute
+  - ANIMATION_WORD_DELAY: delay between each letter in the animation, in miliseconds
+- NTP.h: NTP code and there are a few settings from line 63
+  - GMTOffset: offset from GMT in minutes. For CET it should be set to 60.
+  - sm_latitude, sm_longtitude: Your latitude and longtitude for the sunrise, sunset calculation
+- Arduino Board Configuration: LOLIN(WEMOS) D1 R2 mini, 4MB Flash size
 
 ## PCB
-Minden részletesebb leírás nélkül egyelőre itt az általam használt PCB: https://www.pcbway.com/project/shareproject/PxMatrix_ESP8266_Driver.html
-img könyvtárban van egy kép hogy néz ki. Ennek a leírása kicsit hosszú inkább mesélek róla a Youtube videóban.
+This the PCB I designed for this project, and what you see in the pictures below: https://www.pcbway.com/project/shareproject/PxMatrix_ESP8266_Driver.html
+More details in the video.
 
-## Hardver
-- 32x32 pixeles, 192x192 mm P6 matrix kijelző: https://www.aliexpress.com/item/32658820147.html
-- Wemos D1 mini klón: ebay, aliexpress, banggood, én már nem emlékszem az enyém honnan van
-- 0.1 inch-es tűsor és csatlakozó 
-- jumperek
-- 0.2 inch-es csavaros 2 pólusú csatlakozó
-- fotóellenállás
+## Hardware
+- 32x32 pixel, 192x192 mm P6 matrix display: https://www.aliexpress.com/item/32658820147.html
+- Wemos D1 mini clone: ebay, aliexpress, banggood, I purchased mine a long time ago
+- 0.1 inch male and female pin header 
+- jumpers
+- 0.2 inch pich terminal block
+- LDR
 
-A PI és PO csatlakozóhoz nem vettem szabványos dugót és ajzatot, hanem sima egy soros tűsort és csatlakozót használtam, kéttőt egymás mellett és tökéletesen működik. Sőt a PO és a tápcsatlakozó olyan közel van egymáshoz hogy ott nem és férne el rendes ajzat. Viszont cserébe figyelni kell hogy dugja be az ember a dolgokat. Ahogy a képen is látszik a kijelzőn nyák lapján lévő nyilacskák balról jobbra mutassanak, és a PO csatlakozóba a szalagkábelt úgy kell bedugni hogy a csatlakozó oldalán a kiugrás a ESP felé legyen.
+I did not use the proper keyed 2x5 headers for the PI and PO connectors, I simply used two single pin headers next to each other. And the board works fine, just pay attention how it gets plugged in. In fact the PO header and the power terminal block is so close to each other that a proper male header does not fit. Check how it is plugged in as shown on the picture below. Pay attention to the arrows on the matrix PCB, it should be pointing up and right. The ribbon cable should have the key facing the ESP.
 
 ![Finished PCB](img/20200307_102507.jpg)
 
-A nyákon a táp csatlakozó 5V és GND vezetéke össze van kötve a ESP 5V és GND lábával, így lehet a kijelzőt az ESPn keresztül microUSB csatlakozón keresztül hajtani, vagy más tápellátás esetén azt is a tápcsatlakozóra kötni és akkor azt ad áramot az ESPnek. Az én programom esetén ahol egyszerre sosem világít túl sok LED, USB tápról lehet a kijelzőt hajtani.
-A P6-os matrix kijelző esetén a jumpereket a fenti képen látható módon kell elhelyezni.
-Ez a Word Clock mivel egy időben az összes LEDnek csak viszonylag csak a kis része világít, átlagosan 250-300 mA-t fogyaszt. Így szerintem egy rendes 1A-es USB töltőről működtethető, nincs szükség külön 5V-os tápegységre.
+The PCB contains a 5V and GND power connection which is the terminal block. Those terminals are connected to the 5V and GND pins of the ESP. The display gets the power from the terminal blocks where the provided power cable plugs to. The setup can either be powered from the micro USB of the ESP, or in case of a separate 5V power supply, it should be connected terminal blocks. In both cases ESP and the display will receive power. Even though these displays can draw multiple amps when all pixels are light, in this case the usual consumption is around 150-300 mA. I am powering mine from a decent 1A USB wall charger to have some margin.
 
 ## Fényerő szabályzás
 
