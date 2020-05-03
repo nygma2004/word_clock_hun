@@ -64,6 +64,14 @@ A nyákon a táp csatlakozó 5V és GND vezetéke össze van kötve a ESP 5V és
 A P6-os matrix kijelző esetén a jumpereket a fenti képen látható módon kell elhelyezni.
 Ez a Word Clock mivel egy időben az összes LEDnek csak viszonylag csak a kis része világít, átlagosan 250-300 mA-t fogyaszt. Így szerintem egy rendes 1A-es USB töltőről működtethető, nincs szükség külön 5V-os tápegységre.
 
+## Fényerő szabályzás
+
+A nyákon van hely egy fotoellenállás számára. Én itt nem vágtam le a fotoellenállás lábát, tettem rá zsugorcsövet és kihajlítottam hogy oldalt méreje a fényerőt. Ha jól emlékszem olyan LDR-t vettem ami 5K max megvilágítás mellett. Ehhez egy 5K-s ellenállást forrasztottam az ellenállás helyére (ahol a nyákon 10K felirat szerepel):
+
+![Finished PCB](img/20200503_140058.jpg)
+
+Így a max fényerő amit a ESP mér az olyan 400 körül van, de ahhoz hogy megállapítsam a háttérfényerősséget bőven elég. A beállításokban van 4 érték ami meghatározza hogy minimális analóg jel esetén mi legyen a kijelző fényereje és ugyan ez maximum esetén. Ezzel lehet játszani. Kettő között pedig arányosan alakul a fényerő mértéke.
+
 ## 3D nyomtatott alkatrészek
 Az összes forrás és gcode fájl a 3D könyvtárban található. Teljes modell az alábbi részekből áll:
 - 10x10 raster: ez a kijelzőt lefedő rács ami a 3x3 pixeles szavak megvilágító dobozokat előálltja
@@ -71,5 +79,14 @@ Az összes forrás és gcode fájl a 3D könyvtárban található. Teljes modell
 - Lower corners: ez fogja meg a rácsot a másik oldalról, illetve eltartja a kijelzőt mondjuk a faltól hogy az elektronika elférjen
 - Hanger support: egy kis kúp alakú elem amivel fel lehet akasztani egy szögre
 - Cable holder: szintén egy kúpos elem amivel a kábelt lehet a falnál tartani, illetve hogy ne az USB csatlakozót húzza a kábel súlya
+
+Itt látható az előlap a raszterrel és a 4 sarok elemmel amik pillanat ragasztóval vannak összeragasztva:
+![Finished PCB](img/20200503_140026.jpg)
+
+Kicsit közelebbről a sarok és hogyan illeszkedik a kijelző mélyedéseibe:
+![Finished PCB](img/20200503_140035.jpg)
+
+És a hátlap elemei:
+![Finished PCB](img/20200503_140046.jpg)
 
 Az én órám esetén a számlap 1.5 mm vastag szénacél lemez, amiből a betűk lézervágással lettek kivágva. A lemezt 150-es csiszolópapírral kézzel csiszoltam és utána lakkal befújtam hogy ne rozsdásodjon. A lemez és a raszter háló közé pedig pausz papír került hogy ne látszanak a LED-ek.
