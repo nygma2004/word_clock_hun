@@ -1,13 +1,14 @@
 # Word Clock Hungarian
-This is my implementation of the Word Clock in Hungarian. Rest of the document is in Hungarian, English version will follow with the final version of the code.
+This is my implementation of the Word Clock in Hungarian. I post a long Youtube video on this project if you are interested. Even though I did this project in Hungarian, the code can be easliy adapted to any language. And as long as you can also fit in a 10x10 matrix, it is even easier.
 
-## Változások
+## Change Log
 1.0
-- Egyes mudulok külön header fájlokba lettek szétszedve
+- Settings and other parameters moved to separate files
+- Brigthness control of the display
 
 0.9
-- Kód első verziója, az alap funckiók működnek
-- Fényerő szabályzás még nem működik
+- First version of the code, main features included
+- Brightness control missing
 
 ## Főbb funkciók
 - 10x10 mátrixban elhelyezett magyar szavakkal mutatja az aktuális időt 5 perces pontossággal
