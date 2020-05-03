@@ -62,6 +62,14 @@ A PI és PO csatlakozóhoz nem vettem szabványos dugót és ajzatot, hanem sima
 
 A nyákon a táp csatlakozó 5V és GND vezetéke össze van kötve a ESP 5V és GND lábával, így lehet a kijelzőt az ESPn keresztül microUSB csatlakozón keresztül hajtani, vagy más tápellátás esetén azt is a tápcsatlakozóra kötni és akkor azt ad áramot az ESPnek. Az én programom esetén ahol egyszerre sosem világít túl sok LED, USB tápról lehet a kijelzőt hajtani.
 A P6-os matrix kijelző esetén a jumpereket a fenti képen látható módon kell elhelyezni.
+Ez a Word Clock mivel egy időben az összes LEDnek csak viszonylag csak a kis része világít, átlagosan 250-300 mA-t fogyaszt. Így szerintem egy rendes 1A-es USB töltőről működtethető, nincs szükség külön 5V-os tápegységre.
 
 ## 3D nyomtatott alkatrészek
-Ezek sem véglegesek. Ezek csak azért kellenek hogy az egyes LEDek annyira ne látszódjanak. Minden szükséges fájl ott van a 3D alkönyvtárban.
+Az összes forrás és gcode fájl a 3D könyvtárban található. Teljes modell az alábbi részekből áll:
+- 10x10 raster: ez a kijelzőt lefedő rács ami a 3x3 pixeles szavak megvilágító dobozokat előálltja
+- 4 corners: ez jön a kijelző 4 sarkára. Ezt külön nyomtattam mert egyben nem fért volna bele a 3D nyomtató korlátaiba. Mind a 4 elem kicsit más, mindegyik a megfelelő sarokba kerüljön különben nem tökéletesen illeszkedik
+- Lower corners: ez fogja meg a rácsot a másik oldalról, illetve eltartja a kijelzőt mondjuk a faltól hogy az elektronika elférjen
+- Hanger support: egy kis kúp alakú elem amivel fel lehet akasztani egy szögre
+- Cable holder: szintén egy kúpos elem amivel a kábelt lehet a falnál tartani, illetve hogy ne az USB csatlakozót húzza a kábel súlya
+
+Az én órám esetén a számlap 1.5 mm vastag szénacél lemez, amiből a betűk lézervágással lettek kivágva. A lemezt 150-es csiszolópapírral kézzel csiszoltam és utána lakkal befújtam hogy ne rozsdásodjon. A lemez és a raszter háló közé pedig pausz papír került hogy ne látszanak a LED-ek.
