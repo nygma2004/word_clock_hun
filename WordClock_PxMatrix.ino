@@ -8,6 +8,8 @@
 #include <PubSubClient.h>           // MQTT support
 #include <WiFiUdp.h>                // Added for NTP functionality
 #include "NTP.h"
+#include "settings.h"
+#include "Words_HUN.h"
 
 #include <PxMatrix.h>
 #include <Time.h>
@@ -20,8 +22,6 @@ extern "C" {
 #define PxMATRIX_COLOR_DEPTH 8
 #define PxMATRIX_MAX_HEIGHT 32
 #define PxMATRIX_MAX_WIDTH 32
-#define MINSIZE 19
-#define HOURSIZE 11
 
 #ifdef ESP32
 
@@ -54,78 +54,8 @@ Ticker display_ticker;
 
 // PxMatrix definition
 //PxMATRIX display(32,16,P_LAT, P_OE,P_A,P_B,P_C);
-PxMATRIX display(32,32,P_LAT, P_OE,P_A,P_B,P_C,P_D);
+PxMATRIX display(32,32,P_LAT, P_OE,P_A,P_B,P_C,P_D);   // This is the correct setting for a P6 32x32 1/8 scan matrix
 //PxMATRIX display(64,64,P_LAT, P_OE,P_A,P_B,P_C,P_D,P_E);
-
-// This stores the pixels to be light for each hour. 
-const byte hours[13][HOURSIZE] = {
-  // nulla ora
-  {},
-  // egy ora
-  {75,76,77,255},
-  // ketto ora
-  {85,86,87,88,89,255},
-  // harom ora
-  {55,56,57,58,59,255},    
-  // negy ora
-  {50,51,52,53,255}, 
-  // ot ora
-  {65,66,255}, 
-  // hat ora
-  {47,48,49,255}, 
-  // het ora
-  {67,68,69,255}, 
-  // nyolc ora
-  {60,61,62,63,64,255}, 
-  // kilenc ora
-  {90,91,92,93,94,95,255}, 
-  // tiz ora
-  {70,71,72,255}, 
-  // tizenegy ora
-  {70,71,72,73,74,75,76,77,255}, 
-  // tizenketto ora
-  {80,81,82,83,84,85,86,87,88,89,255}
-  };
-
-// This stores the pixels to be light for each 5 minute interval. 
-const byte minutes[12][MINSIZE] = {
-  // 00 minute
-  {97,98,99,255},
-  // 05 minute
-  {0,1,10,11,12,13,14,15,16,20,21,22,23,97,98,99,255},
-  // 10 minute
-  {3,4,5,10,11,12,13,14,15,16,20,21,22,23,97,98,99,255},
-  // 15 minute
-  {40,41,42,43,44,45,255},
-  // 20 minute
-  {3,4,5,10,11,12,13,25,26,27,28,29,36,37,38,255},
-  // 25 minute
-  {0,1,10,11,12,13,25,26,27,28,29,36,37,38,255},
-  // 30 minute
-  {36,37,38,255},
-  // 35 minute
-  {0,1,10,11,12,13,14,15,16,20,21,22,23,36,37,38,255},
-  // 40 minute
-  {3,4,5,10,11,12,13,14,15,16,20,21,22,23,36,37,38,255},
-  // 45 minute
-  {30,31,32,33,34,40,41,42,43,44,45,255},
-  // 50 minute
-  {3,4,5,10,11,12,13,25,26,27,28,29,97,98,99,255},
-  // 55 minute
-  {0,1,10,11,12,13,25,26,27,28,29,97,98,99,255}
-};
-
-// Update the below parameters for your project
-// Also check NTP.h for some parameters as well
-const char* ssid = "xxx";
-const char* password = "xxx";
-const char* mqtt_server = "192.168.1.xx"; 
-const char* mqtt_user = "xx";
-const char* mqtt_password = "xx";
-const char* clientID = "wordclock";
-const char* topicStatus = "/wordclock/status";
-const char* topicDebug = "/wordclock/debug";
-const char* topicSleep = "/sleep";
 
 String NTPtime = "--:--";
 unsigned long lastTick, uptime, lastNTP, seconds, epoch2, sec, lastANI;
@@ -148,8 +78,6 @@ PubSubClient mqtt(mqtt_server, 1883, 0, espClient);
 // ISR for display refresh
 void display_updater()
 {
-  //display.displayTestPattern(70);
-  // display.displayTestPixel(70);
   display.display();
 }
 #endif
@@ -158,14 +86,13 @@ void display_updater()
 void IRAM_ATTR display_updater(){
   // Increment the counter and set the time of ISR
   portENTER_CRITICAL_ISR(&timerMux);
-  //isplay.display(70);
   display.displayTestPattern(70);
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 #endif
 
 
-// Some standard colors
+// Some standard colors used for the animation each minute
 uint16_t myRED = display.color565(255, 0, 0);
 uint16_t myGREEN = display.color565(0, 255, 0);
 uint16_t myBLUE = display.color565(0, 0, 255);
@@ -185,10 +112,10 @@ void setup() {
     Serial.println("Word Clock - Hungarian");
   
     // Px Matrix display setup
-    display.begin(8);
-    display.setFastUpdate(true);
+    display.begin(8);                      // 1/8 scan display
+    display.setFastUpdate(true); 
     display.setScanPattern(WZAGZIG);
-    display.setColorOrder(BBGGRR);
+    display.setColorOrder(BBGGRR);         // My matrix uses BBGGRR color order instead of RRGGBB
     display.setBrightness(70);
     display.flushDisplay();
   
@@ -262,8 +189,7 @@ void setup() {
     drawWordPixel(seconds%10,seconds/10,myGREEN);
   
     // Update the screen brightness
-    // TEST
-    //BrightnessCheck(); 
+    BrightnessCheck(); 
 
     // Timer interrupt for the clock functions
     os_timer_setfn(&myTimer, timerCallback, NULL);
@@ -318,18 +244,22 @@ void refreshStats() {
   mqttStat += "}";
 }
 
+// Set the screen brightness based on the light sensor analog input
 void BrightnessCheck() {
   // Check for the photoresistor and set the brightness level
   brightnessAnalog = analogRead(0);
-  if (brightnessAnalog<100) {
-    display.setBrightness(10);
-  } else if(brightnessAnalog<400) {
-    display.setBrightness(20);
-  } else if(brightnessAnalog>400) {
-    display.setBrightness(40);
-  }  
+  if (brightnessAnalog<=ANALOG_LOW) {
+    display.setBrightness(BRIGHTNESS_LOW);
+    return;
+  }
+  if (brightnessAnalog>=ANALOG_HIGH) {
+    display.setBrightness(BRIGHTNESS_HIGH);
+    return;
+  }
+  display.setBrightness(BRIGHTNESS_LOW+(BRIGHTNESS_HIGH-BRIGHTNESS_LOW)*(brightnessAnalog-ANALOG_LOW)/(ANALOG_HIGH-ANALOG_LOW));
 }
 
+// Process the data returned by the NTP server
 void handleNTPResponse() {
   // Check for NTP response
   int cb = udp.parsePacket();
@@ -412,6 +342,8 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
+// Calculate the color of the words. There are different color for daytime (white) , nighttime (blue)
+// sunrise (orange) and sunset (red). This function also calculates transition for each of these phases
 void calculateColors() {
 int trans = 3600; // transition period in and out of sunrise and sunset (1 hour)
   // the current NTP corrected time is stored in epoch2. It is assumed that it is updated by the flow
@@ -474,6 +406,7 @@ String msg = "";
   #endif
 }
 
+// Calculate the current time using the millis passed since the last NTP update
 void renderTime() {
   // Construct the current time string
   if (NTPUpdateMillis>0) {
@@ -497,7 +430,8 @@ void renderTime() {
   }  
 }
 
-// This is the 1 second timer callback function
+// This is the 1 second timer callback function for the general housekeeping activities
+// change the screen (animation every minute) and status update
 void timerCallback(void *pArg) {
   sec++;
   seconds++;
@@ -505,8 +439,9 @@ void timerCallback(void *pArg) {
     updateScreen = 2;
     aniSequence = 0;
   }
-  if (seconds==10) {
+  if (seconds==STATUS_UPDATE_INTERVAL) {
     // Send MQTT update
+    BrightnessCheck(); 
     refreshStats();
     if (mqtt_server!="") {
       mqtt.publish(topicStatus, mqttStat.c_str());
@@ -596,16 +531,18 @@ void updateWords() {
   }
 }
 
+// Small animation every minute. Randomly light up 10 words. This gets called 10 times in the main loop 
+// not to lock the main execution
 void updateAnimation() {
-  //display.clearDisplay();
   //Serial.println("Animation starts...");
-  //for(int i=0;i<10;i++) {
     int randNumber = random(100);
-    drawWordPixel(randNumber%10,randNumber/10,myCOLORS[clockfivemin % 6]);
+    drawWordPixel(randNumber%ANIMATION_WORD_COUNT,randNumber/ANIMATION_WORD_COUNT,myCOLORS[clockfivemin % 6]);
     aniSequence++;
-  //}
 }
 
+// Letters are stored as numbers 0-100, first line 0-9, second line 10-19 and so on
+// this method converts this to pixels on the display, in my case I am using a 32x32 matrix
+// outer row and columns not used, remaining 30x30 grid is broken up to 3x3 groups for each letter
 void drawWordPixel(int16_t x, int16_t y, uint16_t color) {
     // update 3x3 pixels for each word, leaving the first row and column empty
     display.drawPixel(1 + x*3, 1 + y*3, color);
@@ -620,19 +557,19 @@ void drawWordPixel(int16_t x, int16_t y, uint16_t color) {
 }
 
 
-
+// Main loop
 void loop() {
 
   // Handle HTTP server requests
   server.handleClient();
 
-  // Uptime calculation
+  // Uptime calculation (calculate uptime in minutes)
   if (millis() - lastTick >= 60000) {            
     lastTick = millis();            
     uptime++;            
   }      
 
-  // Check if NTP update is due
+  // Check if NTP update is due (every hour)
   if ((millis() - NTPUpdateMillis >= 60*60*1000) && (!NTPRequested)) {  
     requestNTPUpdate();
   }    
@@ -657,11 +594,12 @@ void loop() {
 
   // random word animation every minute
   if (updateScreen==2) {
-    if (millis()-lastANI>100) {
+    if (millis()-lastANI>ANIMATION_WORD_DELAY) {
       if (aniSequence==0) {
+        // clear the letters from the screen
         display.clearDisplay();
       }
-      if (aniSequence>9) {
+      if (aniSequence>ANIMATION_WORD_COUNT-1) {
         updateScreen = 3;
         lastANI = millis();
         aniSequence = 0;
