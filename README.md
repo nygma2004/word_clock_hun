@@ -4,6 +4,7 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
 ## Változások
 1.0
 - Egyes mudulok külön header fájlokba lettek szétszedve
+
 0.9
 - Kód első verziója, az alap funckiók működnek
 - Fényerő szabályzás még nem működik
