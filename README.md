@@ -1,5 +1,5 @@
 # Word Clock Hungarian
-This is my implementation of the Word Clock in Hungarian. Rest of the document is in Hungarian, English version will follow with the final version of the code.
+This is my implementation of the Word Clock in Hungarian. Rest of the document is in Hungarian, English of this [document is here](README_EN.md).
 
 ## Változások
 1.0
