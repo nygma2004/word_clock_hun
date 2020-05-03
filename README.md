@@ -2,11 +2,13 @@
 This is my implementation of the Word Clock in Hungarian. Rest of the document is in Hungarian, English version will follow with the final version of the code.
 
 ## Változások
+1.0
+- Egyes mudulok külön header fájlokba lettek szétszedve
 0.9
 - Kód első verziója, az alap funckiók működnek
 - Fényerő szabályzás még nem működik
 
-## Föbb funkciók
+## Főbb funkciók
 - 10x10 mátrixban elhelyezett magyar szavakkal mutatja az aktuális időt 5 perces pontossággal
 - Az egyes szavak színe a napszaknak megfelelően, nappal fehér, este kékes, naplementekor piros, napfelkeltekor narancssárgás és között 1 órát átmenet
 - A pontos időt NTP szerverről szedi, kézi beállítás nincs
@@ -16,8 +18,14 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
 
 ## Telepítés
 - A kód Arudino IDE alatt kell elfordítani, ami ESP8266 alá be van konfigurálva
-- Szükséges libraryk: PxMatrix LED MATRIX library by Dominic Buchstaller, Time by Michael Margolis (és persze az ESP alap libraryk, PubSubClient, stb.)
-- Fő ino fájlban a 125 sortól van pár konstans amit be kell állítani
+- Szükséges libraryk: PxMatrix LED MATRIX library by Dominic Buchstaller, Time by Michael Margolis (ezek megtalálhatók a Library Manager-ben), és persze az ESP alap libraryk, PubSubClient, stb.
+### Projekt fájljai:
+- WordClock_PxMatrix.ino: teljes programkód, ebben nem kell semmit módosítani ha ugyan ezt a kijelzőt használod és szintén magyar a kijelző
+- settings.h: ebbe található a program beállításához szükséges össze paraméter
+  - ANALOG_LOW: a legkisebb mért fény mennyiség (A0 analóg jel értéke)
+  - BRIGHTNESS_LOW: a fenti érték esetén a kijező minimális fényereje
+  - ANALOG_HIGH 120: a legnagyobb mért fény mennyiség (A0 analóg jel értéke)
+  - BRIGHTNESS_HIGH: a fenti érték esetén a kijező maximális fényereje
   - ssid: wifi SSID
   - password: wifi jelszó
   - mqtt_server: MQTT szerver IPje, vagy maradjon üres ha nem kell
@@ -27,6 +35,9 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
   - topicstatus: az MQTT topic amire az óra küldi percenként a státusz üzenetet
   - topicDebug: az MQTT topic amire a debug üzenetek mennek
   - topicSleep: az MQTT topic amire várja a sleep üzentetet
+  - STATUS_UPDATE_INTERVAL: státusz MQTT üzenet gyakoriság másodpercben
+  - ANIMATION_WORD_COUNT: minden percben a rövid animációban kigyújtütt betűk száma
+  - ANIMATION_WORD_DELAY: az animációban az egyes betűk közötti késletetés miliszekundumban
 - NTP.h fájl 63 sorától pár beállítás
   - GMTOffset: időzóna percben CET esetén ez 60
   - sm_latitude, sm_longtitude: földrajzi szélesség és hosszúság a napfelkelte, napnyugta számításhoz
@@ -34,7 +45,7 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
 
 ## PCB
 Minden részletesebb leírás nélkül egyelőre itt az általam használt PCB: https://www.pcbway.com/project/shareproject/PxMatrix_ESP8266_Driver.html
-img könyvtárban van egy kép hogy néz ki. Részletes leírás majd később.
+img könyvtárban van egy kép hogy néz ki. Ennek a leírása kicsit hosszú inkább mesélek róla a Youtube videóban.
 
 ## Hardver
 - 32x32 pixeles, 192x192 mm P6 matrix kijelző: https://www.aliexpress.com/item/32658820147.html
