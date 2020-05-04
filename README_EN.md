@@ -63,29 +63,29 @@ I did not use the proper keyed 2x5 headers for the PI and PO connectors, I simpl
 
 The PCB contains a 5V and GND power connection which is the terminal block. Those terminals are connected to the 5V and GND pins of the ESP. The display gets the power from the terminal blocks where the provided power cable plugs to. The setup can either be powered from the micro USB of the ESP, or in case of a separate 5V power supply, it should be connected terminal blocks. In both cases ESP and the display will receive power. Even though these displays can draw multiple amps when all pixels are light, in this case the usual consumption is around 150-300 mA. I am powering mine from a decent 1A USB wall charger to have some margin.
 
-## Fényerő szabályzás
+## Brightness Control
 
-A nyákon van hely egy fotoellenállás számára. Én itt nem vágtam le a fotoellenállás lábát, tettem rá zsugorcsövet és kihajlítottam hogy oldalt méreje a fényerőt. Ha jól emlékszem olyan LDR-t vettem ami 5K max megvilágítás mellett. Ehhez egy 5K-s ellenállást forrasztottam az ellenállás helyére (ahol a nyákon 10K felirat szerepel):
+There is a place for a photoresistor (LDR) and a pull-down resistor on the board. I soldered my LDR without cutting the leads (insulted the leads with heatsrink tubing) and bent it out to measure the light on the side. I purchased an LDR with a resistor of 5K at full sunlight. For that I used a 5K resistor (where it says 10K on the silk screen). This does not give me the full range of analogue values, but still good enough to conrol the screen brightness:
 
 ![Finished PCB](img/20200503_140058.jpg)
 
-Így a max fényerő amit a ESP mér az olyan 400 körül van, de ahhoz hogy megállapítsam a háttérfényerősséget bőven elég. A beállításokban van 4 érték ami meghatározza hogy minimális analóg jel esetén mi legyen a kijelző fényereje és ugyan ez maximum esetén. Ezzel lehet játszani. Kettő között pedig arányosan alakul a fényerő mértéke.
+With this the max brigtness value I get is around 400. Set the 4 brightness values in the settings.h to control the display. Pick values which works best for you.
 
-## 3D nyomtatott alkatrészek és előlap
-Az összes forrás és gcode fájl a 3D könyvtárban található. Teljes modell az alábbi részekből áll:
-- 10x10 raster: ez a kijelzőt lefedő rács ami a 3x3 pixeles szavak megvilágító dobozokat előálltja
-- 4 corners: ez jön a kijelző 4 sarkára. Ezt külön nyomtattam mert egyben nem fért volna bele a 3D nyomtató korlátaiba. Mind a 4 elem kicsit más, mindegyik a megfelelő sarokba kerüljön különben nem tökéletesen illeszkedik
-- Lower corners: ez fogja meg a rácsot a másik oldalról, illetve eltartja a kijelzőt mondjuk a faltól hogy az elektronika elférjen
-- Hanger support: egy kis kúp alakú elem amivel fel lehet akasztani egy szögre
-- Cable holder: szintén egy kúpos elem amivel a kábelt lehet a falnál tartani, illetve hogy ne az USB csatlakozót húzza a kábel súlya
+## 3D printed parts and clock face
+All 3D printed parts can be found in the 3D folder. There are multiple parts to the complete construction of the clock. You find the STL and gcode files as well.
+- 10x10 raster: this goes on the screen to box the pixels into a 3x3 raster for each letter
+- 4 corners: these corners go on the front of the display. These are separate parts because otherwise the model would have been too big for my 3D printer. Note that all 3 coreders are different, as the groves on the display are not the same in the corners.
+- Lower corners: these corners keep the raster in place for the other side. They also have feeds to keep the display away from the wall to clear the electronics behind.
+- Hanger support: small cone for hanging the clock on the wall
+- Cable holder: keeps the cable along the wall and also acts as a strain relief so the cable does not pull on the ESP
 
-Itt látható az előlap a raszterrel és a 4 sarok elemmel amik pillanat ragasztóval vannak összeragasztva:
+Here you see the raster and the 4 corners which are superglued together:
 ![Finished PCB](img/20200503_140026.jpg)
 
-Kicsit közelebbről a sarok és hogyan illeszkedik a kijelző mélyedéseibe:
+One of the corner in a closeup, and you can see how the raster and the corner fits in the grooves and ridges of the display:
 ![Finished PCB](img/20200503_140035.jpg)
 
-És a hátlap elemei:
+Parts at the back:
 ![Finished PCB](img/20200503_140046.jpg)
 
-Az én órám esetén a számlap 1.5 mm vastag szénacél lemez, amiből a betűk lézervágással lettek kivágva. A lemezt 150-es csiszolópapírral kézzel csiszoltam és utána lakkal befújtam hogy ne rozsdásodjon. A lemez és a raszter háló közé pedig pausz papír került hogy ne látszanak a LED-ek. A design alkönyvtárban van egy dxf, dwg meg pdf terv is. Ezeket a fájlokat küldtem egy egy CNC cégnek és ez alapján vágták ki nekem az előlapot.
+My clock face is 1.5 mm thick mild steel laser cut and hand sanded with 150 grit sandpaper for a brushed effect. Finally it was spray painted with clear laquer to prevent rust. You find the pdf and dwg drawing in the design folder which I sent to the laser cutting company to cut mine. Tracing paper goes in between the clockface and the raster to further blend the light from the individual pixels.
