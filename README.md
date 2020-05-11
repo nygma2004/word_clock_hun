@@ -17,6 +17,9 @@ This is my implementation of the Word Clock in Hungarian. Rest of the document i
 - MQTT szerverre minden percben küld egy státus üzenetet: RSSI, uptime percben és a érzékelt fényerő
 - MQTTn keresztül figyel egy sleep topic-ra, ahova ha 1-es érkezik akkor lekapcsolja a kijelzőt
 
+A projekt teljes bemutatása ezen a videón megnézhető: 
+https://youtu.be/ypevX-sNXiU
+
 ## Telepítés
 - A kód Arudino IDE alatt kell elfordítani, ami ESP8266 alá be van konfigurálva
 - Szükséges libraryk: PxMatrix LED MATRIX library by Dominic Buchstaller, Time by Michael Margolis (ezek megtalálhatók a Library Manager-ben), és persze az ESP alap libraryk, PubSubClient, stb.
